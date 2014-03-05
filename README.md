@@ -1,7 +1,7 @@
 emStructObj
 ===========
 
-A javascript function to convert between C/C++ structs and JS objects in emscripten converted code.
+A set of javascript functions to convert to/from C/C++ structs and JS objects in emscripten converted code.
 
 This project can be found at https://github.com/mark-hahn/emStructObj
 
@@ -30,10 +30,12 @@ It can also be used to convert to and from structs in javascript code.
 
 Status
 ------
-This is a work in progress.  There are no real docs yet.  Also the code in this repo is unfinished and will not work.    It should be ready to use by Mar 5, 2014.  
+This is a work in progress.  There are no real docs yet.  Also the code in this repo is unfinished and will not work. It should be alpha quality by Mar 5, 2014.  
 
 Features
 --------
+
+0. It is 100% javascript and no C code is needed.
 
 1. Create js objects with keys matching the struct member names.
 
