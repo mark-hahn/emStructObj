@@ -29,7 +29,7 @@ It can also be used to convert to and from structs in javascript code.
 
 Status
 ------
-This is a work in progress.  It should be ready to use by Mar 5, 2014.  There are no real docs yet.  
+This is a work in progress.  There are no real docs yet.  Also the code in this repo is unfinished and will not work.    It should be ready to use by Mar 5, 2014.  
 
 Features
 --------
