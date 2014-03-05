@@ -5,6 +5,28 @@ A javascript function to convert between C/C++ structs and JS objects in emscrip
 
 This project can be found at https://github.com/mark-hahn/emStructObj
 
+Purpose
+-------
+
+To enable debugging structs in the emscripten memory (heap) using the javascript console.  This will allow browsing the struct.  Example ...
+
+    console.log(emStructToObj(2915, 'myStruct'));
+    console.log(emso(2915, 'myStruct'));  // aliased for less typing
+    
+2915 is the address of the struct data in the heap.  `myStruct` is the name of the struct defined in a C header file.
+
+It can also be used to convert to and from structs in javascript code.
+
+    function translatePoint(pointAddr, xofs, yofs) {
+    	// convert point C struct in heap to point object
+    	point = emStructToObj(pointAddr, 'POINT');
+    	point.x += xofs;
+    	point.y += yofs;
+    	
+    	// write point back to struct in heap
+    	emObjToStruct(point, pointAddr, 'POINT');
+    }
+
 Status
 ------
 This is a work in progress.  It should be ready to use by Mar 5, 2014.  There are no real docs yet.  
