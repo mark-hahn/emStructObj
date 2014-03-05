@@ -8,7 +8,7 @@
     This module should be included before the emStructObj module in a browser
     For node, require this module.
 ###
-
+ 
 isNode = exports? and module? and module.exports
 
 if isNode

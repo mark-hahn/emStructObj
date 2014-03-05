@@ -3,37 +3,50 @@ emStructObj
 
 A javascript function to convert between C/C++ structs and JS objects in emscripten converted code.
 
---
+This project can be found at https://github.com/mark-hahn/emStructObj
 
-This is a work in progress.  It should be ready to use by Mar 5, 2014.  There are no docs yet.  The following is from a message I posted on the emscripten google group.
+Status
+------
+This is a work in progress.  It should be ready to use by Mar 5, 2014.  There are no real docs yet.  
 
---
+Features
+--------
 
-I'm going to make a javascript function to convert between data structs in the heap and javascript objects.  Then one can have the inspector show the structs as objects for debugging and convert in emscripten converted code for params and return data.
+1. Create js objects with keys matching the struct member names.
 
-I'm going to make it an open source project on github (https://github.com/mark-hahn/emStructObj) so everyone can help.
+2. Supports simple variables as well.
 
-Some features ...
-
-1) Create js objects with keys matching the struct member names.
-
-2) Supports simple variables as well.
-
-3) The definition will be in two parts.  simple type defs and struct defs.  
+3. The definition will be in two parts.  simple type defs and struct defs.  
     
-  a) Simple defs: A hash with type names (short, long, LONG, color, etc) as keys and a def spec as the value.  The def will look like 'size, display, array length'.  
-   i) The size has to be one of: i8, i16, i32, i64, float, or double.
-   ii) Display can be hex, dec, str (ascii string), strw (16-bit unicode str), or one of the struct names.  If a struct name then it is a pointer to that struct def and an object is nested in the object.
-   iii) The array length creates an array of these types assuming the vars/structs are contiguous in memory.
+31. Simple defs: A hash with type names (short, long, LONG, color, etc) as keys and a def spec as the value.  The def will look like 'size, display, array length'.  
 
-  b) Struct defs look like they do in C/C++.   It won't do a real parse, it will just assume one line per member with type and name followed by semicolon.  Usually you will be able to copy a struct definition directly from a c/c++ header. 
+311. The size has to be one of: i8, i16, i32, i64, float, or double.
 
-4) All defs will be in a separate js file included before the emStructObj code.  
+312. Display can be hex, dec, str (ascii string), strw (16-bit unicode str), or one of the struct names.  If a struct name then it is a pointer to that struct def and an object is nested in the object.
 
-5) The emStructObj code will work in any js environment like node and the browser.
+313. The array length creates an array of these types assuming the vars/structs are contiguous in memory.
 
-6) JS functions called from C will be able to convert structs in the heap to objects and vice versa.  It will not only be for debugging.
+32. Struct defs look like they do in C/C++.   It won't do a real parse, it will just assume one line per member with type and name followed by semicolon.  Usually you will be able to copy a struct definition directly from a c/c++ header. 
 
---
+4. All defs will be in a separate js file included before the emStructObj code.  
 
-This is available on an MIT license.  I hope others will help out.
+5. The emStructObj code will work in any js environment like node and the browser.
+
+6. JS functions called from C will be able to convert structs in the heap to objects and vice versa.  It will not only be for debugging.
+
+CoffeeScript
+------------
+You do not need to use coffeescript.  The lib folder has a javascript version of the emStructObj code.  You may also write your struct definition file in javascript instead of coffeescript. If you keep the struct definition file in coffeescript, or you are working on the source code, use the following coffeescript command to watch and compile the emStructObj project whenever a *.coffee file changes.
+
+Note:
+- On windows run this in its own console window so it will keep watching.
+- On linux: add & to the end of the line to run in the background.
+	
+	coffee -cwmo lib .
+
+Pull requests will only be accepted in coffeescript.
+
+License
+-------
+
+This is available under the MIT license.
