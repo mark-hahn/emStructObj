@@ -8,10 +8,11 @@ This project can be found at https://github.com/mark-hahn/emStructObj
 Purpose
 -------
 
-To enable debugging structs in the emscripten memory (heap) using the javascript console.  This will allow browsing the struct.  Example ...
+To enable debugging structs in the emscripten memory (heap) by printing to the javascript console.  This will also allow browsing structs using an inspector console command.  Examples ...
 
-    console.log(emStructToObj(2915, 'myStruct'));
-    console.log(emso(2915, 'myStruct'));  // aliased for less typing
+    console.log('myStruct:', emStructToObj(structAddr, 'myStruct'));  // debug print statement
+    
+    > emso(2915, 'myStruct')  // in js console - emStructToObj aliased for less typing
     
 2915 is the address of the struct data in the heap.  `myStruct` is the name of the struct defined in a C header file.
 
