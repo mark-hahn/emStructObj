@@ -28,8 +28,11 @@ exports.noiseWords = ['PG_FAR', 'void']
 # format param is one of ...
 #    	hex, dec, str, strw, ptr, or name of struct and is used to control display
 
+# set to projet build size
+ptr = 'i32'
+
 exports.typeDefs =
-	ptr:				{size: 'i32', format: 'dec'}  # ptr type is required
+	ptr:				{size:  ptr,  format: 'dec'}  # ptr is required
 	short:				{size: 'i16', format: 'hex'}
 	pg_short_t:			{size: 'i16', format: 'hex'}
 	pg_error:			{size: 'i16', format: 'dec'}

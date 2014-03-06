@@ -30,7 +30,9 @@ It can also be used to convert to and from structs in javascript code.
 
 Status
 ------
-This is a work in progress.  There are no real docs.  The conversion from a C struct to a javascript object, function `emStructObj`, is implemented but the other direction, function `emObjToStruct`, is not.
+This is a work in progress.  There are no real docs.  There are no unit tests. The function emObjToStruct has not been tested.
+
+The function emStructObj has been tested and it is useful for debugging now.  It hasn't been used in a production environment as part of an app's source.
 
 Features
 --------
