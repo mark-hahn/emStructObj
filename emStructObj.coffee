@@ -1,9 +1,8 @@
 ###
-	jspaige\www\js-src\jspaige\emStructDbg.coffee
+	file: emStructObj\emStructObj.coffee
+    source code for emStructObj project
     
-    display emscripten data as C structs
-    customize code to define C stracts
-    outputs labelled struct data to console.log
+    convert emscripten C struct data to/from javascript objects
     to be used as debug calls in code or from javascript console
     include it in emscripten as pre-add file
     creates global window.emStruct function
@@ -16,74 +15,112 @@
     
 		// example: emStruct(100, 'pgm_globals', 5);
 ###
-
-
-########### PARSE DEFINITIONS ############
     
-structs = {}
-structName = struct = null
+    
+########### LOAD DEPENDENCIES ##########
+    
+# emdef is created by emStructDefs.js which is customized for each app
+# It contains useShortcuts, noiseWords, typeDefs, and structDefs
+
+if exports? and module? and module.exports
+	_ = require 'underscore'
+	_.mixin require('underscore.string').exports()
+	emdef = require 'emStructDefs'
+else 
+	_ = window._
+	_.mixin _.str.exports()
+	exports = window
+	emdef = emDefinitions
+	# underscore and underscore.string must be loaded before this file
+
+
+########### PARSE STRUCT DEFINITIONS ############
+    
+structs 	= {}
+struct 		= []
+structName 	= ''
+haveError 	= no
+
+error = (args...) ->
+	console.log 'emStructObj error:', args...
+	haveError = true
 
 chkStruct = ->
-	if not structName then return
-	 
-for defLine in struct_defs.split '\n'
-	if (line = _.trim defLine) is '' then continue
-	if _.startsWith line, 'struct'
-		chkStruct()
+	if structName
+		structs[structName] = struct
 		struct = []
-		structName = _.trim line[6...]
+
+for defLine in emdef.structDefs.split '\n'
+	if (line = _.trim defLine) is '' then continue
+	
+	if _.startsWith line, 'struct '
+		chkStruct()
+		structName = _.trim line[7...]
 		continue
+
 	if not structName
-		console.log 'emStructDbg error: structure name missing -- ', defLine
+		error 'struct name missing --', defLine
 		break
-	member = _.trim line.split(';')[0]
-	words = member.split /\s/
-	type = null
+
+	words = ( _.trim line.split(';')[0]).split /\s/
+	
+	memberType = memberName = isPointer = null
+	
+	wordIdx = 0
 	for word in words
-		if _.startsWith word, '*'
+		if (ptrMatch = /^\*(.*)$/.exec word)
 			isPointer = true
-			word = word[1...]
+			memberType = 'ptr'
+			word = ptrMatch[1]
+			
 		word = _.trim word
-		if word is '' or word in noise_words then continue
+		if word is '' or word in emdef.noiseWords then continue
 		
-		if not isPointer and not type
-			if not (typeDef = typedefs[word])
-				console.log 'emStructDbg error: unknown type label', word, ' -- ', defLine
-				break
-			parmCount = 0
-			def = {}
-			for part in typeDef.split ','
-				if (part = _.trim part) is '' then continue
-				switch parmCount
-					when 0
-						type = part.toLowerCase()
-						if type not in ['i8', 'i16', 'i32', 'i64', 'float', 'double']
-							console.log 'emStructDbg error: invalid size', type, ' -- ', typeDef
-							break
-						def.type = type
-					when 1
-						displaySpec = part.toLowerCase()
-						if displaySpec in ['hex','dec']
-							 def.display    = displaySpec
-						else def.structName = displaySpec
-				parmCount++
-			if parmCount < 2
-				console.log 'emStructDbg error: less than 2 parms in typedef -- ', typeDef
-				break
-			if struct[structName]
-				console.log 'emStructDbg error: duplicate struct name -- ', structName
-				break
-			struct[structName] = def
-			structName = null
+		wordIdx++
+		if isPointer then wordIdx++
+		
+		switch wordIdx 
+			when 1
+				memberType = word
+				typeDef = emdef.typeDefs[memberType]
+				if not typeDef then error 'unknown type', memberType, '--', defLine
+				
+			when 2
+				memberName = word
+				for member in struct
+					if member[1] is memberName
+						error 'duplicate member in', structName, '--', defLine
+						
+				struct.push [memberType, memberName] 
+				
+			else error 'more than 2 words in member def --', defLine
+		
+		if haveError then break
+	if haveError then break
+if haveError then return
+
 chkStruct()
 
-for structName, struct in structs
-	if struct.structName and not structs[struct.structName]
-		console.log 'emStructDbg warning: undefined struct -- ', struct
-		delete struct.structName
-		def.display = 'hex'
+# DEBUG
+console.log structs
+debugger
 
-window.emStruct = () ->
+
+########### FUNCTION TO CONVERT STRUCT TO OBJECT ############
+
+exports.emStructObj = exports.emStructToObj = (addr, name, arrayLen = 1) ->
+
+
+if emdef.useShortcuts then exports.emso = exports.emStructObj
+
+
+########### FUNCTION TO CONVERT OBJECT TO STRUCT ############
+
+exports.emObjToStruct = (obj, addr, name, arrayLen = 1) ->
+
+
+
+if emdef.useShortcuts then exports.emo2s = exports.emObjToStruct
 	
 		
 	

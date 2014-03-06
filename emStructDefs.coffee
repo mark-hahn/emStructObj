@@ -1,49 +1,54 @@
 ###
-    C definitions javascript module for enStructObj project
+    C definitions javascript module for emStructObj project
     
     This file contains definitions for C variables and C structs
+    It also serves as an initialization file (.ini)
     It should be customized for your C application
     This particular file is used in a production project and can be considered a sample
     
-    This module should be included before the emStructObj module in a browser
+    For a browser, this module should be included before the emStructObj module
     For node, require this module.
 ###
- 
-isNode = exports? and module? and module.exports
+  
+if not (exports? and module? and module.exports)
+	exports = window.emDefinitions = {}
 
-if isNode
-	 _ = require 'underscore'
-else exports = window
+# comment out this line to not define shortcut names for functions
+# the shortcuts are ...
+#    emso  for emStructObj
+#    emo2s for emObjToStruct
+exports.useShortcuts = yes
 
-# all struct member lines containing * are considered a pointer
-pointer_size = "i32"
+# These words are ignored (void isn't needed since all defs containing * are pointers to void).
+exports.noiseWords = ['PG_FAR', 'void']
 
-# type definitions 
-# first param is emscription getValue and setValue type ...
+# Type Definitions 
+# size param is one of emscription getValue and setValue types ...
 # 		i8, i16, i32, i64, float, or double
-# second param is hex, dec, or name of struct
-typedefs =
-	short:				'i16, hex'
-	pg_short_t:			'i16, hex'
-	pg_error:			'i16, dec'
-	long:				'i32, hex'
-	pg_handle:			'i32, hex'
-	master_list_ptr:	'i32, hex'
-	mem_debug_proc:		'i32, hex'
-	purge_proc:			'i32, hex'
-	free_memory_proc: 	'i32, hex'
-	memory_ref:			'i32, hex'
-	pg_fail_info_ptr: 	'i32, hex'
-	pg_error_handler:	'i32, hex'
-	
-# These words are ignored (void isn't needed since all * are pointers to anything).
-noise_words = ['PG_FAR', 'void']
+# format param is hex, dec, str, strw, ptr, or name of struct and is used to control display
 
-# All struct defininitions must be here.
+exports.typeDefs =
+	# all struct member lines containing * are type 'ptr'
+	ptr:				{size: 'i32', format: 'dec'}
+	short:				{size: 'i16', format: 'hex'}
+	pg_short_t:			{size: 'i16', format: 'hex'}
+	pg_error:			{size: 'i16', format: 'dec'}
+	long:				{size: 'i32', format: 'hex'}
+	pg_handle:			{size: 'i32', format: 'hex'}
+	master_list_ptr:	{size: 'i32', format: 'hex'}
+	mem_debug_proc:		{size: 'i32', format: 'hex'}
+	purge_proc:			{size: 'i32', format: 'hex'}
+	free_memory_proc: 	{size: 'i32', format: 'hex'}
+	memory_ref:			{size: 'i32', format: 'hex'}
+	pg_fail_info_ptr: 	{size: 'i32', format: 'hex'}
+	pg_error_handler:	{size: 'i32', format: 'hex'}
+	
+# Struct Defininitions
 # Lines that start with "struct" start a struct definition
 # Each member must be on it's own line.  Everything past the semicolon is ignored.
+# This is not really parsed, just extracted with regexes
 
-struct_defs = """
+exports.structDefs = """
 
 struct pgm_globals
 	short					signature;			/* Used for checking/debugging */
