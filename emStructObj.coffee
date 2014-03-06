@@ -109,7 +109,12 @@ addrInc = (size) -> switch size
 	when 'i32', 'float' 	then 4
 	when 'i64', 'double' 	then 8
 	
-toHex = (val) -> if val < 10 then val else '0x' + val.toString 16
+format = (type, val) ->
+	switch type.format
+		when 'hex'  then if val < 10 then val else '0x' + val.toString 16
+		when 'str'  then Pointer_stringify val
+		when 'strw' then UTF16ToString val
+		else val
 			
 exports.emStructObj = emStructObj = exports.emStructToObj = (addr, name, arrayLen) ->
 	if typeof addr isnt 'number' or addr < 0 or addr isnt Math.floor addr
@@ -136,7 +141,7 @@ exports.emStructObj = emStructObj = exports.emStructToObj = (addr, name, arrayLe
 	for idx in [0...(arrayLen ? 1)]
 		if type
 			val = getValue addr, type.size
-			results.push (if type.format is 'hex' then toHex val else val)
+			results.push format type, val
 			addr += typeInc
 			continue
 		
@@ -152,8 +157,7 @@ exports.emStructObj = emStructObj = exports.emStructToObj = (addr, name, arrayLe
 				
 			memberTypeDef = emdef.typeDefs[memberType]
 			val = getValue addr, memberTypeDef.size
-			if memberTypeDef.format is 'hex' then val = toHex val
-			obj[memberName] = val
+			obj[memberName] = format memberTypeDef, val
 			
 			addr += addrInc memberTypeDef.size
 		
