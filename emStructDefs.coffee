@@ -25,11 +25,11 @@ exports.noiseWords = ['PG_FAR', 'void']
 # Type Definitions 
 # size param is one of emscription getValue and setValue types ...
 # 		i8, i16, i32, i64, float, or double
-# format param is hex, dec, str, strw, ptr, or name of struct and is used to control display
+# format param is one of ...
+#    	hex, dec, str, strw, ptr, or name of struct and is used to control display
 
 exports.typeDefs =
-	# all struct member lines containing * are type 'ptr'
-	ptr:				{size: 'i32', format: 'dec'}
+	ptr:				{size: 'i32', format: 'dec'}  # ptr type is required
 	short:				{size: 'i16', format: 'hex'}
 	pg_short_t:			{size: 'i16', format: 'hex'}
 	pg_error:			{size: 'i16', format: 'dec'}
