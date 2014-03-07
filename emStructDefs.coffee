@@ -20,7 +20,7 @@ if not (exports? and module? and module.exports)
 exports.useShortcuts = yes
 
 # These words are ignored (void isn't needed since all defs containing * are pointers to void).
-exports.noiseWords = ['PG_FAR', 'void']
+exports.noiseWords = ['PG_FAR', 'WCHAR', 'void']
 
 # Type Definitions 
 # size param is one of emscription getValue and setValue types ...
@@ -33,10 +33,12 @@ ptr = 'i32'
 
 exports.typeDefs =
 	ptr:				{size:  ptr,  format: 'dec'}  # ptr is required
+	BYTE:				{size: 'i8',  format: 'hex'}
 	short:				{size: 'i16', format: 'hex'}
 	pg_short_t:			{size: 'i16', format: 'hex'}
 	pg_error:			{size: 'i16', format: 'dec'}
 	long:				{size: 'i32', format: 'hex'}
+	LONG:				{size: 'i32', format: 'hex'}
 	pg_handle:			{size: 'i32', format: 'hex'}
 	master_list_ptr:	{size: 'i32', format: 'hex'}
 	mem_debug_proc:		{size: 'i32', format: 'hex'}
@@ -45,7 +47,7 @@ exports.typeDefs =
 	memory_ref:			{size: 'i32', format: 'hex'}
 	pg_fail_info_ptr: 	{size: 'i32', format: 'hex'}
 	pg_error_handler:	{size: 'i32', format: 'hex'}
-	
+
 # Struct Defininitions
 # Lines that start with "struct" start a struct definition
 # Each member must be on it's own line.  Everything past the semicolon is ignored.
@@ -84,5 +86,21 @@ struct pgm_globals
 	void PG_FAR				*app_globals;		/* Ptr to globals for PAIGE, etc. */
 	long					creator;			/* For Mac file I/O */
 	long					fileType;			/* For Mac file I/O */
+
+struct logFontW
+    LONG      lfHeight;
+    LONG      lfWidth;
+    LONG      lfEscapement;
+    LONG      lfOrientation;
+    LONG      lfWeight;
+    BYTE      lfItalic;
+    BYTE      lfUnderline;
+    BYTE      lfStrikeOut;
+    BYTE      lfCharSet;
+    BYTE      lfOutPrecision;
+    BYTE      lfClipPrecision;
+    BYTE      lfQuality;
+    BYTE      lfPitchAndFamily;
+    WCHAR     *lfFaceName;
 
 """  

@@ -37,7 +37,7 @@ The function emStructObj has been tested and it is useful for debugging now.  It
 Features
 --------
 
-0. It is 100% javascript and no C code is needed.
+0. 100% javascript and no C code is needed.
 
 1. Create js objects with keys matching the struct member names.
 
@@ -71,7 +71,7 @@ Note:
 	
 	coffee -cwmo lib .
 
-Pull requests will only be accepted in coffeescript.
+Pull requests will only be accepted in coffeescript.  If you aren't comfortable writing coffeescript then send me javascript or any other pseudo-code and I'll translate it to coffeescript.
 
 License
 -------
