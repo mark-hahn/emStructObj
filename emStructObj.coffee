@@ -160,11 +160,7 @@ exports.emStructObj = emStructObj = exports.emStructToObj = (addr, name, arrayLe
 			memberTypeDef = emdef.typeDefs[memberType]
 			addrOrVal = (if typeof memberTypeDef.size is 'number' then addr \
 						 else getValue addr, memberTypeDef.size)
-			
-			if memberTypeDef.format is 'strw' then debugger
-			
 			obj[memberName] = format memberTypeDef, addrOrVal, logFormat
-			
 			addr += addrInc memberTypeDef.size
 		
 		results.push obj
@@ -232,18 +228,18 @@ exports.emObjToStruct = emObjToStruct = (obj, addr, name) ->
 			format = memberTypeDef.format
 			size   = memberTypeDef.size
 			
-			objVal = obj[memberName]
+			val = obj[memberName]
 			
-			if typeof objVal is string 
-				if objVal[0..1].toLowerCase() is '0x' and format is 'hex'
-					val = parseInt objVal[2..], 16
+			if typeof val is 'string'
+				if val[0..1].toLowerCase() is '0x' and format is 'hex'
+					val = parseInt val[2..], 16
 				else
 					charSize = (if format is 'strw' then 2 else 1)
 					size = (if charSize is 1 then 'i8' else 'i16')
-					buf = _malloc (objVal.length + 1) * charSize
+					buf = _malloc (val.length + 1) * charSize
 					newBufs.push buf
 					strAddr = buf
-					for char in objVal
+					for char in val
 						setValue strAddr, char, size
 						strAddr += charSize
 					setValue strAddr, 0, size

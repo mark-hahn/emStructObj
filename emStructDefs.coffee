@@ -104,4 +104,8 @@ struct logFontW
     BYTE      PitchAndFamily;
     WCHAR32   FaceName;
 
+struct SIZE
+    LONG      x;
+    LONG      y;
+
 """  
