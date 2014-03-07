@@ -20,7 +20,7 @@ if not (exports? and module? and module.exports)
 exports.useShortcuts = yes
 
 # These words are ignored (void isn't needed since all defs containing * are pointers to void).
-exports.noiseWords = ['PG_FAR', 'WCHAR', 'void']
+exports.noiseWords = ['PG_FAR', 'void']
 
 # Type Definitions 
 # size param is one of emscription getValue and setValue types ...
@@ -47,6 +47,7 @@ exports.typeDefs =
 	memory_ref:			{size: 'i32', format: 'hex'}
 	pg_fail_info_ptr: 	{size: 'i32', format: 'hex'}
 	pg_error_handler:	{size: 'i32', format: 'hex'}
+	WCHAR32:			{size:   64,  format: 'strw'}
 
 # Struct Defininitions
 # Lines that start with "struct" start a struct definition
@@ -88,19 +89,19 @@ struct pgm_globals
 	long					fileType;			/* For Mac file I/O */
 
 struct logFontW
-    LONG      lfHeight;
-    LONG      lfWidth;
-    LONG      lfEscapement;
-    LONG      lfOrientation;
-    LONG      lfWeight;
-    BYTE      lfItalic;
-    BYTE      lfUnderline;
-    BYTE      lfStrikeOut;
-    BYTE      lfCharSet;
-    BYTE      lfOutPrecision;
-    BYTE      lfClipPrecision;
-    BYTE      lfQuality;
-    BYTE      lfPitchAndFamily;
-    WCHAR     *lfFaceName;
+    LONG      Height;
+    LONG      Width;
+    LONG      Escapement;
+    LONG      Orientation;
+    LONG      Weight;
+    BYTE      Italic;
+    BYTE      Underline;
+    BYTE      StrikeOut;
+    BYTE      CharSet;
+    BYTE      OutPrecision;
+    BYTE      ClipPrecision;
+    BYTE      Quality;
+    BYTE      PitchAndFamily;
+    WCHAR32   FaceName;
 
 """  

@@ -103,11 +103,13 @@ chkStruct()
 
 ########### FUNCTION TO CONVERT STRUCT TO OBJECT ############
     
-addrInc = (size) -> switch size
-	when 'i8' 				then 1
-	when 'i16' 				then 2
-	when 'i32', 'float' 	then 4
-	when 'i64', 'double' 	then 8
+addrInc = (size) -> 
+	if typeof size is 'number' then return size
+	switch size
+		when 'i8' 				then 1
+		when 'i16' 				then 2
+		when 'i32', 'float' 	then 4
+		when 'i64', 'double' 	then 8
 
 format = (type, val, logFormat) -> switch type.format
 	when 'hex'  then (if val < 10 or not logFormat then val else '0x' + val.toString 16)
@@ -139,8 +141,9 @@ exports.emStructObj = emStructObj = exports.emStructToObj = (addr, name, arrayLe
 	results = []
 	for idx in [0...(arrayLen ? 1)]
 		if type
-			val = getValue addr, type.size
-			results.push format type, val, logFormat
+			addrOrVal = (if typeof type.size is 'number' then addr \
+						 else getValue addr, type.size)
+			results.push format type, addrOrVal, logFormat
 			addr += typeInc
 			continue
 		
@@ -155,8 +158,12 @@ exports.emStructObj = emStructObj = exports.emStructToObj = (addr, name, arrayLe
 				continue
 				
 			memberTypeDef = emdef.typeDefs[memberType]
-			val = getValue addr, memberTypeDef.size
-			obj[memberName] = format memberTypeDef, val, logFormat
+			addrOrVal = (if typeof memberTypeDef.size is 'number' then addr \
+						 else getValue addr, memberTypeDef.size)
+			
+			if memberTypeDef.format is 'strw' then debugger
+			
+			obj[memberName] = format memberTypeDef, addrOrVal, logFormat
 			
 			addr += addrInc memberTypeDef.size
 		

@@ -32,7 +32,7 @@ Status
 ------
 This is a work in progress.  There are no real docs.  There are no unit tests. The function emObjToStruct has not been tested.
 
-The function emStructObj has been tested and it is useful for debugging now.  It hasn't been used in a production environment as part of an app's source.
+The function emStructObj has been tested and it is useful for debugging now.  It has been used in a production environment as part of an app's source but it should be considered alpha quality at best.
 
 Features
 --------
